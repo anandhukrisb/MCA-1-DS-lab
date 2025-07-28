@@ -1,35 +1,23 @@
-
-/* 
-Q2) Use a menu-driven program to insert, search, delete and sort elements 
-    in an array using functions (use global variables)   
-*/
-
 #include <stdio.h>
 
-// a[4] and pos are the global variables that are declared to get accessed by every functions.
-int a[4], pos = -1;
+int a[4], pos = -1; // global array and position tracker
 
-
-// This is a function to insert elements into the array from the back.
-// e is the parameter for element.
+// Insert element at the end
 void insert(int e) {
     if(pos + 1 == 4) {
-        printf("The array is Full!!");
-    }
-    else {
-        a[++pos] =e;
+        printf("The array is full!!\n");
+    } else {
+        a[++pos] = e;
+        printf("Inserted %d\n", e);
     }
 }
 
-// This search function is for searching an element in the array and in returns it prints
-// the position.
+// Search for an element in the array
 void search(int e) {
-    
-    int size = sizeof(a) / sizeof(a[0]);
     int isFound = 0;
     int searchPosition;
 
-    for(int i = 0; i < size; i++) {
+    for(int i = 0; i <= pos; i++) {
         if(a[i] == e) {
             isFound = 1;
             searchPosition = i + 1;
@@ -37,40 +25,33 @@ void search(int e) {
         }
     }
     if(isFound) {
-        printf("\nElement found at position %d\n", searchPosition);
-    }
-    else {
-        printf("Element not found!!");
+        printf("Element found at position %d\n", searchPosition);
+    } else {
+        printf("Element not found!!\n");
     }
 }
 
-// This delete function deletes an element from the array from a specific position.
-void delete(int p) {
-    int size = sizeof(a) / sizeof(a[0]);
-    for(int i = p; i < size; i++) {
-        a[i] = a[i + 1];
-        size--;
+// Delete element at a given position (1-based)
+void deleteElement(int p) {
+    if(p < 1 || p > pos + 1) {
+        printf("Invalid position!\n");
+        return;
     }
+
+    for(int i = p - 1; i < pos; i++) {
+        a[i] = a[i + 1];
+    }
+
     pos--;
     printf("Deleted the element at position %d\n", p);
-
-    for(int i = 0; i <= size; i++) {
-        printf("%d ", a[i]);
-    }
 }
 
-// This sort function sorts element in ascending order when called.
+// Sort elements in ascending order
 void sort() {
     int temp;
-
-    printf("Original Array: ");
-    for(int i = 0; i < sizeof(a) / sizeof(a[0]); i++) {
-        printf("%d ", a[i]);
-    }
-
-    for(int i = 0; i < sizeof(a) / sizeof(a[0]); i++) {
-        for(int j = 0; j < (sizeof(a) / sizeof(a[0])) - i - 1; j++) {
-            if(a[j + 1] < a[j]) {
+    for(int i = 0; i <= pos; i++) {
+        for(int j = 0; j < pos - i; j++) {
+            if(a[j] > a[j + 1]) {
                 temp = a[j];
                 a[j] = a[j + 1];
                 a[j + 1] = temp;
@@ -78,73 +59,72 @@ void sort() {
         }
     }
 
-    printf("Sorted Array:");
-    for(int i = 0; i < sizeof(a) / sizeof(a[0]); i++) {
-        printf("%d ", a[i]);
-    }
+    printf("Array sorted in ascending order.\n");
 }
 
-// This display function displays all element in an array when called.
+// Display all elements
 void display() {
-    printf("Array: ");
-    for(int i = 0; i < sizeof(a) / sizeof(a[0]); i++) {
+    if(pos == -1) {
+        printf("Array is empty.\n");
+        return;
+    }
+
+    printf("Array elements: ");
+    for(int i = 0; i <= pos; i++) {
         printf("%d ", a[i]);
     }
+    printf("\n");
 }
 
-
-// This function provides the choices and lets the user choose their choice when called.
+// Show menu and return user choice
 int menu() {
     int ch;
-
-    printf("\n1) Insert\n2) Search\n3) Delete at a posotion\n4) Sort\n5) Display \n6) Exit\n Enter your choice: ");
+    printf("\n1) Insert\n2) Search\n3) Delete at a position\n4) Sort\n5) Display\n6) Exit\n");
+    printf("Enter your choice: ");
     scanf("%d", &ch);
-
     return ch;
 }
 
-// This function provide the corresponding functions when the user select their choices from the 
-// menu() function.
+// Main logic controller
 void processArray() {
-
     int e;
-    
-    for(int ch = menu(); ch != 6; ch = menu()) {
-        
-        switch (ch) {
-        case 1:
-            printf("Enter the value to insert: ");
-            scanf("%d", &e);
-            insert(e);
-            break;
-        case 2:
-            printf("Enter the element to search: ");
-            scanf("%d", &e);
-            search(e);
-            break;
-        case 3:
-            printf("Enter the postition to delete: ");
-            scanf("%d", &e);
-            delete(e);
-            break;
-        case 4:
-            sort();
-            break;
-        case 5:
-            display();
-            break;
-        default:
-            printf("Enter a valid function!");
-            break;
+
+    while(1) {
+        int ch = menu();
+
+        switch(ch) {
+            case 1:
+                printf("Enter the value to insert: ");
+                scanf("%d", &e);
+                insert(e);
+                break;
+            case 2:
+                printf("Enter the element to search: ");
+                scanf("%d", &e);
+                search(e);
+                break;
+            case 3:
+                printf("Enter the position to delete (1-based): ");
+                scanf("%d", &e);
+                deleteElement(e);
+                break;
+            case 4:
+                sort();
+                break;
+            case 5:
+                display();
+                break;
+            case 6:
+                printf("Exiting...\n");
+                return;
+            default:
+                printf("Enter a valid choice!\n");
         }
     }
-    printf("Exiting...");
 }
 
-// The main function only calls processArray function and handle these array operations.
+// Main function
 int main() {
-
     processArray();
-
     return 0;
 }

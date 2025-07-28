@@ -1,8 +1,5 @@
 
-/* 
-Q1) Write programs to demonstrate the use of storage classes 
-    (local variable, global variable, static variable, register variable) in C.   
-*/
+
 
 #include <stdio.h>
 
