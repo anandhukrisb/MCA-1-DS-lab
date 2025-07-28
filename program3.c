@@ -6,13 +6,9 @@ Q2) Use a menu-driven program to insert, search, delete and sort elements
 
 #include <stdio.h>
 
-// a[4] and pos are the global variables that are declared to get accessed by every functions.
-int a[4], pos = -1;
-
-
 // This is a function to insert elements into the array from the back.
 // e is the parameter for element.
-void insert(int e) {
+void insert(int a[], int pos, int e) {
     if(pos + 1 == 4) {
         printf("The array is Full!!");
     }
@@ -23,7 +19,7 @@ void insert(int e) {
 
 // This search function is for searching an element in the array and in returns it prints
 // the position.
-void search(int e) {
+void search(int a[], int pos, int e) {
     
     int size = sizeof(a) / sizeof(a[0]);
     int isFound = 0;
@@ -45,7 +41,7 @@ void search(int e) {
 }
 
 // This delete function deletes an element from the array from a specific position.
-void delete(int p) {
+void delete(int a[], int pos, int p) {
     int size = sizeof(a) / sizeof(a[0]);
     for(int i = p; i < size; i++) {
         a[i] = a[i + 1];
@@ -60,7 +56,7 @@ void delete(int p) {
 }
 
 // This sort function sorts element in ascending order when called.
-void sort() {
+void sort(int a[]) {
     int temp;
 
     printf("Original Array: ");
@@ -85,7 +81,7 @@ void sort() {
 }
 
 // This display function displays all element in an array when called.
-void display() {
+void display(int a[]) {
     printf("Array: ");
     for(int i = 0; i < sizeof(a) / sizeof(a[0]); i++) {
         printf("%d ", a[i]);
@@ -107,6 +103,10 @@ int menu() {
 // menu() function.
 void processArray() {
 
+    // a[4] and pos are local variable and only accessed by other functions when  
+    // passed as arguments.
+    int a[4], pos = -1;
+
     int e;
     
     for(int ch = menu(); ch != 6; ch = menu()) {
@@ -115,23 +115,23 @@ void processArray() {
         case 1:
             printf("Enter the value to insert: ");
             scanf("%d", &e);
-            insert(e);
+            insert(a, pos, e);
             break;
         case 2:
             printf("Enter the element to search: ");
             scanf("%d", &e);
-            search(e);
+            search(a, pos, e);
             break;
         case 3:
             printf("Enter the postition to delete: ");
             scanf("%d", &e);
-            delete(e);
+            delete(a, pos, e);
             break;
         case 4:
-            sort();
+            sort(a);
             break;
         case 5:
-            display();
+            display(a);
             break;
         default:
             printf("Enter a valid function!");
@@ -143,7 +143,6 @@ void processArray() {
 
 // The main function only calls processArray function and handle these array operations.
 int main() {
-
     processArray();
 
     return 0;
